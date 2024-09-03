@@ -1,0 +1,2912 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "summary": "Create new user with default categories and payment sources",
+        "description": "\n        Required:\n        - email: string\n        - password: string\n        ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The user has been successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Error creating user or Failed to send email "
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/confirm": {
+      "get": {
+        "operationId": "AuthController_confirm",
+        "summary": "Confirm user registration",
+        "description": "\n        Requires:\n        - token in Query",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "query",
+            "description": "\n      token from the confirmation email",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAZ21haWwuY29tIiwiaWF0IjoxNzE4NTI5MTc1LCJleHAiOjE3MTg1MzI3NzV9.bt37MOCVzAEs3q3CInW-BTrSZvI6EmVxk562Q8P3gHA",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user registration has been successfully confirmed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmOutputDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\n      BadRequestException: No token or invalid token"
+          },
+          "409": {
+            "description": "\n      ConflictException: User not found or incorrect email"
+          },
+          "500": {
+            "description": "\n      HttpException: Error confirming registration"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/request-confirm": {
+      "post": {
+        "operationId": "AuthController_reRequestVerification",
+        "summary": "Re-request a new verification token",
+        "description": "\n       Requires:\n      - token in the header\n      \n      - Limit: one request per hour",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "\n      ok: The new token has been successfully send to user email"
+          },
+          "400": {
+            "description": "\n      BadRequestException: No token provided"
+          },
+          "429": {
+            "description": "\n      TooManyRequestsException: Too Many Requests"
+          },
+          "500": {
+            "description": "\n      HttpException: Failed to send email"
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/forgot-password": {
+      "post": {
+        "operationId": "AuthController_forgotPassword",
+        "summary": "Forgot password",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The reset password token has been successfully send to user email"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "operationId": "AuthController_resetPassword",
+        "summary": "Reset password",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The password has been successfully reset"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Login user",
+        "description": "Requires email and password.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user has been successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "summary": "Refresh user token",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user token has been successfully refreshed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshInputDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "delete": {
+        "operationId": "AuthController_logout",
+        "summary": "Logout user",
+        "description": "The user has been successfully logged out. Note: Requires a token in the header.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The user has been successfully logged out. Note: Requires a token in the header."
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/change-password": {
+      "put": {
+        "operationId": "AuthController_changePassword",
+        "summary": "Set new password",
+        "description": "\n        Requires:\n        - token in header\n        - old password in Body\n        - new password in Body\n        ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetNewPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The password has been successfully updated"
+          },
+          "400": {
+            "description": "Logical and validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": [
+                        "Wrong password",
+                        "Password must contain at least one digit and one uppercase letter.",
+                        "New password must be different from the old one",
+                        "Password must be shorter than or equal to 20 characters",
+                        "Password must be longer than or equal to 6 characters",
+                        "Password must be a string",
+                        "Password must contain at least one digit and one uppercase letter"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/payment-source": {
+      "post": {
+        "operationId": "PaymentSourceController_create",
+        "summary": "Create a new payment source",
+        "description": "The payment source has been successfully created.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentSourceInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The payment source has been successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSourceOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Payment source"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PaymentSourceController_getAll",
+        "summary": "Get all payment sources",
+        "description": "The payment sources have been successfully retrieved.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The payment sources have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentSourceOutputDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Payment source"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/payment-source/{id}": {
+      "delete": {
+        "operationId": "PaymentSourceController_delete",
+        "summary": "Delete a payment source",
+        "description": "The payment source has been successfully deleted.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The payment source id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The payment source has been successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSourceOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Payment source"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "PaymentSourceController_getOne",
+        "summary": "Get a payment source by id",
+        "description": "The payment source has been successfully retrieved.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The payment source id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The payment source has been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSourceOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Payment source"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "PaymentSourceController_update",
+        "summary": "Update a payment source",
+        "description": "The payment source has been successfully updated.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The payment source id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "The payment source input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentSourceInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The payment source has been successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSourceOutputDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Payment source"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/category": {
+      "get": {
+        "operationId": "CategoryController_getAll",
+        "summary": "Get all users categories",
+        "description": "\n      Requires:\n      - token in the header",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "\n      ok: The users categories successfully received.\n      ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "\n      - Internal Server Error: Error get categories"
+          }
+        },
+        "tags": [
+          "Category"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CategoryController_create",
+        "summary": "Create category",
+        "description": "\n      Requires:\n      - token in header\n      - title in Body\n      - color in Body\n      \n      Optionally:\n      - comments in Body",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "\n      - ok: The category was successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryOutputDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "\n      - Conflict: Category already exist"
+          },
+          "500": {
+            "description": "\n      - Internal Server Error: Error create category"
+          }
+        },
+        "tags": [
+          "Category"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/category/{categoryId}": {
+      "get": {
+        "operationId": "CategoryController_getOne",
+        "summary": "Get user Category by id",
+        "description": "\n      Requires:\n      - token in the header,\n      - categoryId in Params",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "required": true,
+            "in": "path",
+            "description": "#### The Category source id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      - ok: The user category successfully received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\n      - Bad Request: Invalid MongoDB object id"
+          },
+          "401": {
+            "description": "\n      - Unauthorized: Forbidden"
+          },
+          "409": {
+            "description": "\n      - Conflict: Category not found"
+          }
+        },
+        "tags": [
+          "Category"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "CategoryController_update",
+        "summary": "Update a category source",
+        "description": "\n        Requires:\n        - token in the header,\n        - categoryId in Param\n        - title in Body\n        - color in Body\n        \n        Optionally:\n        - comments in Body\n      ",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "required": true,
+            "in": "path",
+            "description": "The category source id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "The payment source input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "\n      - ok: The category source has been successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryOutputDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\n      - Bad Request: Invalid MongoDB object id"
+          },
+          "401": {
+            "description": "\n      - Unauthorized: Forbidden"
+          },
+          "409": {
+            "description": "\n      - Conflict: Category not found"
+          },
+          "500": {
+            "description": "\n      - Internal Server Error: Error update category"
+          }
+        },
+        "tags": [
+          "Category"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CategoryController_delete",
+        "summary": "Delete user category by id",
+        "description": "\n        Requires:\n        - token in the header,\n        - categoryId in Param",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "required": true,
+            "in": "path",
+            "description": "The category source id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      - ok: The user category successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryOutputDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\n      - Bad Request: Invalid MongoDB object id"
+          },
+          "401": {
+            "description": "\n      - Unauthorized: Forbidden"
+          },
+          "409": {
+            "description": "\n      - Conflict: Category not found"
+          },
+          "500": {
+            "description": "\n      - Internal Server Error: Error delete category"
+          }
+        },
+        "tags": [
+          "Category"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense": {
+      "get": {
+        "operationId": "ExpenseController_getOwn",
+        "summary": "Get users Expenses by ID from a header or by a Query request.",
+        "description": "      \n        Requires:\n        - token in header\n\n        Optionally:\n        - createdStartDate in Params\n        - createdEndDate in Params\n        - amountStart in Params\n        - amountEnd in Params\n        - paymentSourceId in Params\n        - categoryId in Params\n        - limit in Params\n        - skip in Params",
+        "parameters": [
+          {
+            "name": "createdStartDate",
+            "required": false,
+            "in": "query",
+            "description": "\n      createdStartDate: Start date",
+            "example": "2024-05-18T08:36:41.000",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdEndDate",
+            "required": false,
+            "in": "query",
+            "description": "\n      createdEndDate: End date",
+            "example": "2024-06-18T08:36:41.000",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "amountStart",
+            "required": false,
+            "in": "query",
+            "description": "\n      amountStart: Start amount",
+            "example": 100,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "amountEnd",
+            "required": false,
+            "in": "query",
+            "description": "\n      amountEnd: End amount",
+            "example": 1000,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "paymentSourceId",
+            "required": false,
+            "in": "query",
+            "description": "\n      paymentSourceId: Payment source ID",
+            "example": "6616f96da226986482597b6c",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "description": "\n      categoryId: Category ID",
+            "example": "6616f96da226986482597b6c",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "\n      limit: Count of expenses to receive",
+            "example": 100,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "description": "\n      skip: Count of expenses to skip",
+            "example": 10,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      ok: The users Expenses successfully received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpenseOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\n      Bad Request: Expense with such id not found"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "ExpenseController_create",
+        "summary": "Create a new expense.",
+        "description": "\n       Requires:\n      - token in the header\n      - amount in Body\n      - categoryId in Body\n      - paymentSourceId in Body\n      - currency in Body\n\n      Optionally:\n      - comments in Body\n      - createdAt in Body",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "\n      ok: The Expense was successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseOutputDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\n      Bad Request: Error during expense creation..."
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense/{expenseId}": {
+      "get": {
+        "operationId": "ExpenseController_getById",
+        "summary": "Get user Expense by id",
+        "description": "\n      Requires:\n      - token in the header,\n      - expenseId in Params",
+        "parameters": [
+          {
+            "name": "expenseId",
+            "required": true,
+            "in": "path",
+            "description": "\n      expenseId: The ID of the user Expense.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      ok: The user Expense successfully received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "\n      Unauthorized: Access denied or not accesses"
+          },
+          "404": {
+            "description": "\n      Bad Request: Expense with such id not found"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "ExpenseController_update",
+        "summary": "Update Expense by id",
+        "description": "\n      Requires:\n      - token in the header\n      - expenseId in Params\n      - amount in Body\n      - categoryId in Body\n      - paymentSourceId in Body\n      - currency in Body\n\n      Optionally:\n      - comments in Body\n      - createdAt in Body\n      ",
+        "parameters": [
+          {
+            "name": "expenseId",
+            "required": true,
+            "in": "path",
+            "description": "\n      expenseId: The ID of the Expense to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "\n      ok: The user Expense successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "\n      Unauthorized: Access denied or not accesses"
+          },
+          "404": {
+            "description": "\n      Bad Request: Expense with such id not found"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "ExpenseController_delete",
+        "summary": "Delete Expense by id",
+        "description": "\n      Requires:\n      - token in the header\n      - expenseId in Params",
+        "parameters": [
+          {
+            "name": "expenseId",
+            "required": true,
+            "in": "path",
+            "description": "\n      expenseId: The ID of the Expense to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      ok: The user Expense successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "\n      Unauthorized: Access denied or not accesses"
+          },
+          "404": {
+            "description": "\n      Bad Request: Expense with such id not found"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense/bulk": {
+      "post": {
+        "operationId": "ExpenseController_getBulk",
+        "summary": "Get expenses by ids",
+        "description": "\n        Requires:\n        - a token in the header\n        - ids in the body",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get expenses by ids response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpenseOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied or not accesses"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense/category/{categoryId}": {
+      "get": {
+        "operationId": "ExpenseController_getByCategory",
+        "summary": "Get expenses by category",
+        "description": "\n        Requires:\n        - a token in the header\n        - category in the params",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get expenses by category response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpenseOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied or not accesses"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense/payment-source/{paymentSourceId}": {
+      "get": {
+        "operationId": "ExpenseController_getByPaymentSource",
+        "summary": "Get expenses by payment source",
+        "description": "\n        Requires:\n        - a token in the header\n        - payment source in the params",
+        "parameters": [
+          {
+            "name": "paymentSourceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All expenses by payment source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpenseOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied or not accesses"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense/shared/{sharedId}": {
+      "get": {
+        "operationId": "ExpenseController_getShared",
+        "summary": "Get shared Expenses by id",
+        "description": "\n      Get all shared expenses by the ID of the user who given access\n\n      Requires:\n      - token in the header,\n      - sharedId in Params",
+        "parameters": [
+          {
+            "name": "sharedId",
+            "required": true,
+            "in": "path",
+            "description": "\n      sharedId: The ID of the user who given access to shared expenses.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      ok: The user Expenses successfully received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "\n      Unauthorized: Access denied or not accesses"
+          },
+          "404": {
+            "description": "\n      Bad Request: Expense with such id not found"
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/expense/family-budget/{familyBudgetId}": {
+      "get": {
+        "operationId": "ExpenseController_getByFamilyBudget",
+        "summary": "Get expenses by family budget ID",
+        "description": "\n      Requires:\n      - token in the header,\n      - familyBudgetId in Params",
+        "parameters": [
+          {
+            "name": "familyBudgetId",
+            "required": true,
+            "in": "path",
+            "description": "\n      The ID of the family budget.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      OK: The expenses have been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpenseOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "\n      Unauthorized: Access denied."
+          },
+          "404": {
+            "description": "\n      Not Found: No expenses found for the given family budget ID."
+          }
+        },
+        "tags": [
+          "Expense"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/access-control": {
+      "post": {
+        "operationId": "AccessControlController_create",
+        "summary": "Create access control",
+        "description": "\n        Requires:\n        - a token in the header",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "DTO with access control data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessControlInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Create access control success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessControlOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Forbidden, you do not have access to this resource"
+          },
+          "403": {
+            "description": "\n      error messages:\n        - Error create access control\n        - You cannot share with yourself\n        - You already shared this expenses with this user\n        - You already shared this categories with this user\n        - You already shared this payment sources with this user"
+          },
+          "500": {
+            "description": "Error create access control"
+          }
+        },
+        "tags": [
+          "Access control"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "AccessControlController_getOwn",
+        "summary": "Get all access control",
+        "description": "\n        Requires:\n        - a token in the header",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Get all access control response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccessControlOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Access control"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/access-control/me": {
+      "get": {
+        "operationId": "AccessControlController_getSharedWithMe",
+        "summary": "Get shared with me access control",
+        "description": "\n        Requires:\n        - a token in the header",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Get shared with me access control response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccessControlOutputDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Access control"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/access-control/delete-me": {
+      "put": {
+        "operationId": "AccessControlController_deleteMeFromShared",
+        "summary": "Delete me from shared",
+        "description": "\n        Requires: \n          - accessId in body,\n          - token in header,\n          \n        Optionally in body:\n          - expenseIds?: string[],\n          - categoryIds?: string[],\n          - paymentSourceIds?: string[]\n      ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "DTO with IDs of shared expenses, categories, and payment sources.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteMeFromSharedInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delete me from shared response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteMeFromSharedInputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Error delete me from shared"
+          },
+          "404": {
+            "description": "Access control not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Access control"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/access-control/{id}": {
+      "delete": {
+        "operationId": "AccessControlController_delete",
+        "summary": "Delete access control",
+        "description": "\n        Requires:\n        - a token in the header",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Access control id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete access control success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Access control"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "AccessControlController_update",
+        "summary": "Update access control",
+        "description": "\n        Requires:\n        - a token in the header\n        - id in the params",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Access control id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "DTO with access control data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessControlInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update access control success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessControlOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Access control"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/family-budget": {
+      "post": {
+        "operationId": "FamilyBudgetController_create",
+        "summary": "Create a new family budget",
+        "description": "\n      Requires:\n      - token in the header,\n      - body with family budget data",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "\n        The family budget to be created.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyBudgetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "\n      Created: The family budget has been successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FamilyBudget"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\n      Bad Request: Invalid data provided."
+          }
+        },
+        "tags": [
+          "FamilyBudget"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "FamilyBudgetController_findAll",
+        "summary": "Get all family budgets",
+        "description": "\n            Requires:\n            - token in the header",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "\n            OK: The family budgets have been successfully retrieved."
+          },
+          "404": {
+            "description": "\n            Not Found: No family budgets found."
+          }
+        },
+        "tags": [
+          "FamilyBudget"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/family-budget/{id}": {
+      "get": {
+        "operationId": "FamilyBudgetController_findOne",
+        "summary": "Get family budget by ID",
+        "description": "\n      Requires:\n      - token in the header,\n      - family budget ID in Params",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "\n      The ID of the family budget.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      OK: The family budget has been successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FamilyBudget"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\n      Not Found: The family budget with the given ID was not found."
+          }
+        },
+        "tags": [
+          "FamilyBudget"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "FamilyBudgetController_update",
+        "summary": "Update family budget by ID",
+        "description": "\n      Requires:\n      - token in the header,\n      - family budget ID in Params\n      - body with updated family budget data",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "\n      The ID of the family budget.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFamilyBudgetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "\n      OK: The family budget has been successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FamilyBudget"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\n      Not Found: The family budget with the given ID was not found."
+          }
+        },
+        "tags": [
+          "FamilyBudget"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "FamilyBudgetController_remove",
+        "summary": "Delete family budget by ID",
+        "description": "\n      Requires:\n      - token in the header,\n      - family budget ID in Params",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "\n      The ID of the family budget.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\n      OK: The family budget has been successfully deleted."
+          },
+          "404": {
+            "description": "\n      Not Found: The family budget with the given ID was not found."
+          }
+        },
+        "tags": [
+          "FamilyBudget"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/{email}": {
+      "get": {
+        "operationId": "UserController_getByEmail",
+        "summary": "Get user by email",
+        "description": "Requires a partially user email",
+        "parameters": [
+          {
+            "name": "email",
+            "required": true,
+            "in": "path",
+            "description": "User email",
+            "example": "exmaple@gmail.com",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user by email response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindByOutputDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/api/user/id/{id}": {
+      "get": {
+        "operationId": "UserController_getById",
+        "summary": "Get user by id",
+        "description": "\n        Requires:\n        - a token in the header",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User id",
+            "example": "5f6a0c8b3e0b8f001f8e7e7c",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user by id response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FindByOutputDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/api/user/delete-me": {
+      "delete": {
+        "operationId": "UserController_deleteMe",
+        "summary": "Delete Me",
+        "description": "\n      Requires:\n      - token in Headers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "\n      - ok: The user was deleted successfully"
+          },
+          "401": {
+            "description": "\n      - Conflict: Tokens do not match"
+          },
+          "404": {
+            "description": "\n      - Conflict: Error delete user"
+          },
+          "500": {
+            "description": "\n      - Internal Server Error: Error delete user"
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/upload-avatar": {
+      "post": {
+        "operationId": "UserController_uploadAvatar",
+        "summary": "Upload avatar",
+        "description": "Requires a file",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upload avatar response"
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user-config": {
+      "post": {
+        "operationId": "UserConfigController_createConfig",
+        "summary": "Create user config",
+        "description": "\n        Requires:\n        - token in Headers\n        - theme in Body\n        - currency in Body\n        - language in Body\n        - showCategoryColours in Body\n        - showSourceColours in Body\n        - showCategoryNames in Body\n        - showSourceNames in Body\n        - showSharedExpenses in Body",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserConfigInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The user config was created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserConfigOutputDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "User config already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "User Config"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "UserConfigController_getConfig",
+        "summary": "Get user config",
+        "description": "\n            Requires:\n            - token in Headers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User config successfully fetched",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserConfigOutputDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User config not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "User Config"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user-config/{id}": {
+      "put": {
+        "operationId": "UserConfigController_updateConfig",
+        "summary": "Update user config",
+        "description": "\n            Requires:\n            - token in Headers\n            - id of the user config in Params\n            - theme in Body\n            - currency in Body\n            - language in Body\n            - showCategoryColours in Body\n            - showSourceColours in Body\n            - showCategoryNames in Body\n            - showSourceNames in Body\n            - showSharedExpenses in Body",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User config id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserConfigInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User config successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserConfigOutputDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User config not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "User Config"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Shoplist API",
+    "description": "Shoplist API description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "Expenses",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "AuthInputDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@gmail.com",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123",
+            "description": "User password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "ConfirmOutputDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@gmail.com",
+            "description": "Login email"
+          },
+          "login": {
+            "type": "string",
+            "example": "Bob",
+            "description": "Login user"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-08-01T00:00:00.000Z",
+            "description": "Date of registration of the"
+          }
+        },
+        "required": [
+          "email",
+          "login",
+          "createdAt"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@gmail.com",
+            "description": "User email"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "Password123",
+            "description": "User password"
+          }
+        },
+        "required": [
+          "password"
+        ]
+      },
+      "LoginInputDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@gmail.com",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123",
+            "description": "User password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginOutputDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "example@gmail.com",
+            "description": "Email user"
+          },
+          "login": {
+            "type": "string",
+            "example": "Bob",
+            "description": "Login user"
+          },
+          "avatar": {
+            "type": "string",
+            "example": "https://example.com/avatar.png",
+            "description": "User avatar link"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "example": "true",
+            "description": "Is the user verified or not"
+          },
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNjI5MzQwMzIyLCJleHAiOjE2MjkzNDAzMjJ9.1J7Z",
+            "description": "AccessToken token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNjI5MzQwMzIyLCJleHAiOjE2MjkzNDAzMjJ9.1J7Z",
+            "description": "Refresh token"
+          }
+        },
+        "required": [
+          "email",
+          "login",
+          "avatar",
+          "isVerified",
+          "accessToken",
+          "refreshToken"
+        ]
+      },
+      "RefreshInputDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNjI5MzQwMzIyLCJleHAiOjE2MjkzNDAzMjJ9.1J7Z",
+            "description": "Refresh token"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "SetNewPasswordDto": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "example": "Password123",
+            "description": "Old password"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "Password123",
+            "description": "New password"
+          }
+        },
+        "required": [
+          "oldPassword",
+          "newPassword"
+        ]
+      },
+      "PaymentSourceInputDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Bank A",
+            "description": "Payment source title"
+          },
+          "comments": {
+            "type": "string",
+            "example": "Comments",
+            "description": "Some extra information"
+          },
+          "color": {
+            "type": "string",
+            "example": "#00fa58",
+            "description": "Color of the payment source, used for decoration in the UI"
+          }
+        },
+        "required": [
+          "title",
+          "comments",
+          "color"
+        ]
+      },
+      "PaymentSourceOutputDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "60b4b6b0a9f8b4001f9c4f5b",
+            "description": "Payment source id"
+          },
+          "title": {
+            "type": "string",
+            "example": "Bank A",
+            "description": "Payment source title"
+          },
+          "comments": {
+            "type": "string",
+            "example": "Comments",
+            "description": "Some extra information"
+          },
+          "color": {
+            "type": "string",
+            "example": "#00fa58",
+            "description": "Color of the payment source, used for decoration in the UI"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-08-26T21:25:46.670Z",
+            "description": "Creation date"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-08-26T21:25:46.670Z",
+            "description": "Last update date"
+          },
+          "userId": {
+            "type": "string",
+            "example": "60b4b6b0a9f8b4001f9c4f5b",
+            "description": "User id"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "comments",
+          "color",
+          "createdAt",
+          "updatedAt",
+          "userId"
+        ]
+      },
+      "CategoryOutputDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "object",
+            "example": "6616f96da226986482597b6c",
+            "description": "Category ID"
+          },
+          "title": {
+            "type": "string",
+            "example": "Products",
+            "description": "Category Title"
+          },
+          "userId": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "User ID"
+          },
+          "comments": {
+            "type": "string",
+            "example": "All kinds of products...",
+            "description": "A note about the category"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-01T00:00:00.000Z",
+            "description": "Date of creation"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-01T00:00:00.000Z",
+            "description": "Date of last update"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "userId",
+          "comments",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CategoryInputDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Products",
+            "description": "Category name"
+          },
+          "color": {
+            "type": "string",
+            "example": "#00fa58",
+            "description": "Color of the category, used for decoration in the UI"
+          },
+          "comments": {
+            "type": "string",
+            "example": "All kinds of products...",
+            "description": "A note about the category"
+          }
+        },
+        "required": [
+          "title",
+          "color"
+        ]
+      },
+      "ExpenseOutputDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "Unique identifier of the expense."
+          },
+          "amount": {
+            "type": "number",
+            "example": "15",
+            "description": "Amount of the expense."
+          },
+          "userId": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "User ID."
+          },
+          "categoryId": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "Category ID."
+          },
+          "paymentSourceId": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "Payment source ID."
+          },
+          "comments": {
+            "type": "string",
+            "example": "Product purchase",
+            "description": "Comments for the expense."
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD",
+            "description": "Currency of the expense."
+          },
+          "exchangeRates": {
+            "type": "object",
+            "example": {
+              "USD": 1,
+              "EUR": 0.82,
+              "GBP": 0.72
+            },
+            "description": "Exchange rates for the currency."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-06-08T09:04:50.592Z",
+            "description": "Date created the expense."
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-06-08T09:04:50.592Z",
+            "description": "Date updated the expense."
+          }
+        },
+        "required": [
+          "_id",
+          "amount",
+          "userId",
+          "categoryId",
+          "paymentSourceId",
+          "comments",
+          "currency",
+          "exchangeRates",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ObjectId": {
+        "type": "object",
+        "properties": {}
+      },
+      "ExpenseInputDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": "15",
+            "description": "Amount of the expense"
+          },
+          "categoryId": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "Category ID"
+          },
+          "paymentSourceId": {
+            "type": "string",
+            "example": "6616f96da226986482597b6c",
+            "description": "Payment source ID"
+          },
+          "comments": {
+            "type": "string",
+            "example": "Product purchase",
+            "description": "Comments for the expense"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD",
+            "description": "Currency of the expense"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-06-08T09:04:50.592Z",
+            "description": "Date created the expense."
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-06-08T09:04:50.592Z",
+            "description": "Date updated the expense."
+          },
+          "familyBudgetId": {
+            "example": "60c72b2f9b1e8e1f88f4e1f4",
+            "description": "Family budget ID",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ObjectId"
+              }
+            ]
+          }
+        },
+        "required": [
+          "amount",
+          "categoryId",
+          "paymentSourceId",
+          "currency"
+        ]
+      },
+      "AccessControlInputDto": {
+        "type": "object",
+        "properties": {
+          "sharedWith": {
+            "type": "string",
+            "example": "5f6a0c8b3e0b8f001f8e7e7c",
+            "description": "User id"
+          },
+          "expenseIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c",
+              "5f6a0c8b3e0b8f001f8e7e7d"
+            ],
+            "description": "Expense ids",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categoryIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c",
+              "5f6a0c8b3e0b8f001f8e7e7d"
+            ],
+            "description": "Category ids",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paymentSourceIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c",
+              "5f6a0c8b3e0b8f001f8e7e7d"
+            ],
+            "description": "Payment source ids",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "sharedWith",
+          "expenseIds",
+          "categoryIds",
+          "paymentSourceIds"
+        ]
+      },
+      "AccessControlOutputDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "5f6a0c8b3e0b8f001f8e7e7c",
+            "description": "Access control id"
+          },
+          "ownerId": {
+            "type": "string",
+            "example": "5f6a0c8b3e0b8f001f8e7e7c",
+            "description": "Owner id"
+          },
+          "sharedWith": {
+            "type": "string",
+            "example": "5f6a0c8b3e0b8f001f8e7e7c",
+            "description": "User id"
+          },
+          "expenseIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c"
+            ],
+            "description": "Owner id",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categoryIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c"
+            ],
+            "description": "Category ids",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paymentSourceIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c"
+            ],
+            "description": "Payment source ids",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "_id",
+          "ownerId",
+          "sharedWith",
+          "expenseIds",
+          "categoryIds",
+          "paymentSourceIds"
+        ]
+      },
+      "DeleteMeFromSharedInputDto": {
+        "type": "object",
+        "properties": {
+          "accessId": {
+            "type": "string",
+            "example": "5f6a0c8b3e0b8f001f8e7e7c",
+            "description": "Access id"
+          },
+          "expenseIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c",
+              "5f6a0c8b3e0b8f001f8e7e7d"
+            ],
+            "description": "Expense that shared with me",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categoryIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c",
+              "5f6a0c8b3e0b8f001f8e7e7d"
+            ],
+            "description": "Categories that shared with me",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paymentSourceIds": {
+            "example": [
+              "5f6a0c8b3e0b8f001f8e7e7c",
+              "5f6a0c8b3e0b8f001f8e7e7d"
+            ],
+            "description": "Payment sources that shared with me",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "accessId",
+          "expenseIds",
+          "categoryIds",
+          "paymentSourceIds"
+        ]
+      },
+      "CreateFamilyBudgetDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Smith Family Budget",
+            "description": "Name of the family budget"
+          },
+          "members": {
+            "example": [
+              "60c72b2f9b1e8e1f88f4e1f4",
+              "60c72b3a9b1e8e1f88f4e1f5"
+            ],
+            "description": "Array of user IDs who are members of the family budget, can be empty",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "members"
+        ]
+      },
+      "FamilyBudget": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateFamilyBudgetDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "FindByOutputDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User id",
+            "example": "60d4b5a2c1f5f83b2c0b7c0b"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "example@gmail.com"
+          },
+          "login": {
+            "type": "string",
+            "description": "User login",
+            "example": "example"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "description": "Is user verified",
+            "example": false
+          },
+          "loginDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last login date",
+            "example": "2024-06-08T09:04:50.592Z"
+          }
+        },
+        "required": [
+          "_id",
+          "email",
+          "login",
+          "isVerified",
+          "loginDate"
+        ]
+      },
+      "UserConfigInputDto": {
+        "type": "object",
+        "properties": {
+          "theme": {
+            "type": "string",
+            "description": "Preferred theme of the user",
+            "enum": [
+              "light",
+              "dark",
+              "system"
+            ]
+          },
+          "currency": {
+            "type": "string",
+            "description": "Preferred currency of the user",
+            "enum": [
+              "AUD",
+              "BGN",
+              "BRL",
+              "CAD",
+              "CHF",
+              "CNY",
+              "CZK",
+              "DKK",
+              "EUR",
+              "GBP",
+              "HKD",
+              "HRK",
+              "HUF",
+              "IDR",
+              "ILS",
+              "INR",
+              "ISK",
+              "JPY",
+              "KRW",
+              "MXN",
+              "MYR",
+              "NOK",
+              "NZD",
+              "PHP",
+              "PLN",
+              "RON",
+              "RUB",
+              "SEK",
+              "SGD",
+              "THB",
+              "TRY",
+              "USD",
+              "ZAR"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "description": "Preferred language of the user",
+            "enum": [
+              "ru",
+              "en",
+              "de",
+              "es",
+              "fr"
+            ]
+          },
+          "showCategoryColours": {
+            "type": "boolean",
+            "description": "Show category colours"
+          },
+          "showSourceColours": {
+            "type": "boolean",
+            "description": "Show source colours"
+          },
+          "showCategoryNames": {
+            "type": "boolean",
+            "description": "Show category names"
+          },
+          "showSourceNames": {
+            "type": "boolean",
+            "description": "Show source names"
+          },
+          "showSharedExpenses": {
+            "type": "boolean",
+            "description": "Show shared expenses"
+          },
+          "showSharedCategories": {
+            "type": "boolean",
+            "description": "Show shared categories"
+          },
+          "showSharedSources": {
+            "type": "boolean",
+            "description": "Show shared sources"
+          },
+          "showExpensesInEachCurrency": {
+            "type": "boolean",
+            "description": "Show expenses in each currency"
+          }
+        },
+        "required": [
+          "theme",
+          "currency",
+          "language",
+          "showCategoryColours",
+          "showSourceColours",
+          "showCategoryNames",
+          "showSourceNames",
+          "showSharedExpenses",
+          "showSharedCategories",
+          "showSharedSources",
+          "showExpensesInEachCurrency"
+        ]
+      },
+      "UserConfigOutputDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier of the user config"
+          },
+          "theme": {
+            "type": "string",
+            "description": "Preferred theme of the user",
+            "enum": [
+              "light",
+              "dark",
+              "system"
+            ]
+          },
+          "currency": {
+            "type": "string",
+            "description": "Preferred currency of the user",
+            "enum": [
+              "AUD",
+              "BGN",
+              "BRL",
+              "CAD",
+              "CHF",
+              "CNY",
+              "CZK",
+              "DKK",
+              "EUR",
+              "GBP",
+              "HKD",
+              "HRK",
+              "HUF",
+              "IDR",
+              "ILS",
+              "INR",
+              "ISK",
+              "JPY",
+              "KRW",
+              "MXN",
+              "MYR",
+              "NOK",
+              "NZD",
+              "PHP",
+              "PLN",
+              "RON",
+              "RUB",
+              "SEK",
+              "SGD",
+              "THB",
+              "TRY",
+              "USD",
+              "ZAR"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "description": "Preferred language of the user",
+            "enum": [
+              "ru",
+              "en",
+              "de",
+              "es",
+              "fr"
+            ]
+          },
+          "showCategoryColours": {
+            "type": "boolean",
+            "description": "Show category colours"
+          },
+          "showSourceColours": {
+            "type": "boolean",
+            "description": "Show source colours"
+          },
+          "showCategoryNames": {
+            "type": "boolean",
+            "description": "Show category names"
+          },
+          "showSourceNames": {
+            "type": "boolean",
+            "description": "Show source names"
+          },
+          "showSharedExpenses": {
+            "type": "boolean",
+            "description": "Show shared expenses"
+          },
+          "showSharedCategories": {
+            "type": "boolean",
+            "description": "Show shared categories"
+          },
+          "showSharedSources": {
+            "type": "boolean",
+            "description": "Show shared sources"
+          },
+          "showExpensesInEachCurrency": {
+            "type": "boolean",
+            "description": "Show expenses in each currency"
+          }
+        },
+        "required": [
+          "_id",
+          "theme",
+          "currency",
+          "language",
+          "showCategoryColours",
+          "showSourceColours",
+          "showCategoryNames",
+          "showSourceNames",
+          "showSharedExpenses",
+          "showSharedCategories",
+          "showSharedSources",
+          "showExpensesInEachCurrency"
+        ]
+      }
+    }
+  }
+}

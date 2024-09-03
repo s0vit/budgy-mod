@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ec06fb9a-b5d4-4447-9f59-a3f67b41d26b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prettierignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prettierrc.cjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RootApp.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/api/api-schema.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/api/api.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/api/budgyApi.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/ActionButtons.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/ExpenseInput.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/ExpenseItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/ExpenseItemMenuModal.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/ExpenseTable.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/ExpensesDayGroup.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/NumberPad.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/expense/ui/SpentThisPeriod.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/entities/user/model/userSlice.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/AddTabButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/ExpensesListScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/HomeScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/LoginScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/Modals/AddExpenseModal.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/Navigation/MainNavigator.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/Navigation/RootStackNavigation.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/screens/Navigation/types.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/shared/constants/colors.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/shared/constants/currencyEnum.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/shared/utils/addOpacityToColor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/shared/utils/getContrastText.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/shared/utils/spentThisPeriod.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/store/SLICE_NAMES.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/store/store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ui-kit/Card.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ui-kit/Input/Input.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ui-kit/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/widgets/CurrencyPicker.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/widgets/HorizontalList/HorizontalItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/widgets/HorizontalList/HorizontalList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/budgy-background.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/category.mock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eslint.config.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/expenses.mock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/openapi-config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/paymentSources.mock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="tsconfig.json" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2l6k9btrJMAyovsj9sg1avTwe4E" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/aleksejduzev/Projects/work/sovit/budgy-mob/assets&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/aleksejduzev/Projects/work/sovit/budgy-mob/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+        <entry key="com.intellij.reactbuddy.storybook" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/screens/Navigation" />
+      <recent name="$PROJECT_DIR$/app/screens/Modals" />
+      <recent name="$PROJECT_DIR$/app/ui-kit" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/app/shared" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/WithProviders.tsx" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.18034.50" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ec06fb9a-b5d4-4447-9f59-a3f67b41d26b" name="Changes" comment="" />
+      <created>1724507762918</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1724507762918</updated>
+      <workItem from="1724507764125" duration="16154000" />
+      <workItem from="1724539847217" duration="1026000" />
+      <workItem from="1724540878508" duration="36537000" />
+      <workItem from="1724683615449" duration="17234000" />
+      <workItem from="1724828714306" duration="6000" />
+      <workItem from="1724941596023" duration="30288000" />
+      <workItem from="1725089064168" duration="6893000" />
+      <workItem from="1725198233858" duration="2499000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
