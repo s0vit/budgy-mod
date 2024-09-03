@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { store } from './app/store/store.ts';
 
 export default function App() {
-  console.log('App');
   registerTranslation('en', enGB);
   return (
     <Provider store={store}>
