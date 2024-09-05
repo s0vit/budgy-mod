@@ -4,12 +4,12 @@ import { addOpacityToColor } from '../../../shared/utils/addOpacityToColor.ts';
 import categoriesMock from '../../../../category.mock.json';
 import paymentSourcesMock from '../../../../paymentSources.mock.json';
 import { getContrastText } from '../../../shared/utils/getContrastText.ts';
-import { TExpense } from './ExpenseTable.tsx';
 import ExpenseItemMenuModal from './ExpenseItemMenuModal.tsx';
 import { colors } from '../../../shared/constants/colors.ts';
+import { ExpenseOutputDto } from '../../../api/budgyApi.ts';
 
 type TExpenseItemProps = {
-  item: TExpense;
+  item: ExpenseOutputDto;
 };
 
 const ExpenseItem = ({ item }: TExpenseItemProps) => {
@@ -54,6 +54,9 @@ const ExpenseItem = ({ item }: TExpenseItemProps) => {
                 {item.amount} {item.currency}
               </Text>
             </View>
+          </View>
+          <View style={styles.expenseDate}>
+            <Text style={styles.comments}>{new Date(item.createdAt).toLocaleTimeString().slice(0, 5)}</Text>
           </View>
           <View style={styles.expenseDetails}>
             <Text style={styles.comments}>{item.comments}</Text>

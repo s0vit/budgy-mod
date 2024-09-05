@@ -1,13 +1,28 @@
 import React from 'react';
 import ExpenseTable from '../entities/expense/ui/ExpenseTable.tsx';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { colors } from '../shared/constants/colors.ts';
-import expensesMock from './../../expenses.mock.json';
+import { useExpenseControllerGetOwnQuery } from '../api/budgyApi.ts';
 
 const ExpensesListScreen = () => {
+  const { data, isLoading, error } = useExpenseControllerGetOwnQuery({});
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+  if (error) {
+    return (
+      <View>
+        <Text>Error: {`${error}`}</Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.expensesContainer}>
-      <ExpenseTable expenses={expensesMock} />
+      <ExpenseTable expenses={data} />
     </View>
   );
 };

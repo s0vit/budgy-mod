@@ -1,22 +1,34 @@
 import React from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { TExpense } from './ExpenseTable.tsx';
 import ExpenseItem from './ExpenseItem.tsx';
-import { colors } from '../../../shared/constants/colors.ts';
 import Card from '../../../ui-kit/Card.tsx';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { budgyApi, ExpenseOutputDto } from '../../../api/budgyApi.ts';
+import { useSelector } from 'react-redux';
 
 type TExpensesDayGroupProps = {
   date: string;
-  expenses: TExpense[];
+  expenses: ExpenseOutputDto[];
 };
 
 const ExpensesDayGroup = ({ expenses, date }: TExpensesDayGroupProps) => {
-  const totalAmount = expenses.reduce((acc, expense) => acc + expense.amount, 0);
-
   const { width, height } = useWindowDimensions();
   const { left, right } = useSafeAreaInsets();
   const isVertical = height > width;
+
+  const { data, isLoading } = useSelector(budgyApi.endpoints.userConfigControllerGetConfig.select());
+
+  if (isLoading || !data) {
+    return null;
+  }
+
+  const totalAmount = expenses
+    .reduce((acc, expense) => {
+      const userCurrency = data.currency;
+      return acc + expense.amount * expense.exchangeRates[userCurrency as keyof typeof expense.exchangeRates]; // TODO: fix ENUM link on backend
+    }, 0)
+    .toFixed(2);
+
   return (
     <Card
       extraStyles={{
@@ -27,7 +39,9 @@ const ExpensesDayGroup = ({ expenses, date }: TExpensesDayGroupProps) => {
     >
       <View style={styles.totalAmountContainer}>
         <Text>{new Date(date).toLocaleDateString()}</Text>
-        <Text style={styles.totalAmount}>{totalAmount}</Text>
+        <Text style={styles.totalAmount}>
+          {totalAmount} {data?.currency}
+        </Text>
       </View>
       <View style={styles.expensesContainer}>
         {expenses.map((expense) => (

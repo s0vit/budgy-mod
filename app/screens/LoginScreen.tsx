@@ -1,7 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../store/store.ts';
 import { useAuthControllerLoginMutation } from '../api/budgyApi.ts';
-import { Pressable, StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { setUser } from '../entities/user/model/userSlice.ts';
 import { colors } from '../shared/constants/colors.ts';
 import { TErrorType } from '../api/api.ts';
@@ -53,6 +62,9 @@ const LoginScreen = () => {
         if (castedError.data.meta.password) {
           setPasswordErrors(castedError.data.meta.password);
         }
+        if (castedError.data.meta.message) {
+          setEmailErrors(castedError.data.meta.message);
+        }
       }
     }
   }, [error]);
@@ -60,39 +72,46 @@ const LoginScreen = () => {
   const isButtonDisabled = !email || !password || isLoading || emailErrors.length > 0 || passwordErrors.length > 0;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{isLoading ? 'Loading...' : 'Hello'}</Text>
-      <Card extraStyles={{ width: '80%' }}>
-        <KeyboardAvoidingView style={styles.inputContainer} enabled behavior="height">
-          <Input placeholder="Email" value={email} onChangeText={emailEnterHandler} errors={emailErrors} />
-          <Input
-            placeholder="Password"
-            value={password}
-            onChangeText={passwordEnterHandler}
-            errors={passwordErrors}
-            isSecureText
-          />
-          <Pressable
-            onPress={loginHandler}
-            android_ripple={{ color: colors.accentDark }}
-            style={({ pressed }) => [
-              styles.loginButton,
-              (pressed && styles.loginButtonPressed) || (isButtonDisabled && styles.loginButtonDisabled),
-            ]}
-          >
-            <Text style={styles.loginButtonText}>Login</Text>
-          </Pressable>
-        </KeyboardAvoidingView>
-      </Card>
-    </View>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.screen}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Text style={styles.title}>{isLoading ? 'Loading...' : 'Hello'}</Text>
+          <Card extraStyles={{ width: '80%' }}>
+            <Input placeholder="Email" value={email} onChangeText={emailEnterHandler} errors={emailErrors} />
+            <Input
+              placeholder="Password"
+              value={password}
+              onChangeText={passwordEnterHandler}
+              errors={passwordErrors}
+              isSecureText
+              withEyeIcon
+            />
+            <Pressable
+              onPress={loginHandler}
+              android_ripple={{ color: colors.accentDark }}
+              style={({ pressed }) => [
+                styles.loginButton,
+                (pressed && styles.loginButtonPressed) || (isButtonDisabled && styles.loginButtonDisabled),
+              ]}
+            >
+              <Text style={styles.loginButtonText}>Login</Text>
+            </Pressable>
+          </Card>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   container: {
     flex: 1,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -108,12 +127,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.black100,
     marginBottom: 50,
-  },
-  inputContainer: {
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    width: '100%',
-    gap: 10,
+    overflow: 'hidden',
   },
   loginButton: {
     backgroundColor: colors.accent,

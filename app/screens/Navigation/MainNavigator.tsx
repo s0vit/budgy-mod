@@ -9,7 +9,9 @@ import { IconProps } from '@expo/vector-icons/build/createIconSet';
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BOTTOM_TAB_ROUTES, BottomTabParamList } from './types.tsx';
-import { ImageBackground, StyleSheet, View, Text } from 'react-native';
+import { ImageBackground, StyleSheet } from 'react-native';
+import { useUserConfigControllerGetConfigQuery } from '../../api/budgyApi.ts';
+import ProfileScreen from '../ProfileScreen.tsx';
 
 type IconNames =
   | 'home'
@@ -39,11 +41,14 @@ const createTabBarIcons: TCreateTabBarIcons = ({ focused, color, size, route }) 
   return <Ionicons name={iconName} size={size} color={color} />;
 };
 
+const NullComponent = () => null;
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 export const MainTabNavigator = () => {
   const user = useAppSelector(selectUser);
   const { top } = useSafeAreaInsets();
+
+  useUserConfigControllerGetConfigQuery(undefined, { skip: !user });
 
   return (
     <ImageBackground
@@ -63,8 +68,11 @@ export const MainTabNavigator = () => {
         ) : (
           <>
             <Tab.Screen name={BOTTOM_TAB_ROUTES.EXPENSES} component={ExpensesListScreen} />
+            <Tab.Screen name={BOTTOM_TAB_ROUTES.PROFILE} component={ProfileScreen} />
+
             <Tab.Screen
               name={BOTTOM_TAB_ROUTES.ADD}
+              component={NullComponent}
               options={{
                 tabBarButton: (props) => (
                   <AddTabButton {...props}>
@@ -72,9 +80,7 @@ export const MainTabNavigator = () => {
                   </AddTabButton>
                 ),
               }}
-            >
-              {() => null}
-            </Tab.Screen>
+            />
           </>
         )}
       </Tab.Navigator>

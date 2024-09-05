@@ -5,6 +5,8 @@
     "strict": true,
     "jsx": "react-jsx",
     "moduleResolution": "bundler",
+//    "moduleResolution": "node",
+//    use that for npx @rtk-query/codegen-openapi openapi-config.ts
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,

@@ -801,44 +801,11 @@ export type UserConfigOutputDto = {
   /** Unique identifier of the user config */
   _id: string;
   /** Preferred theme of the user */
-  theme: 'light' | 'dark' | 'system';
+  theme: Theme;
   /** Preferred currency of the user */
-  currency:
-    | 'AUD'
-    | 'BGN'
-    | 'BRL'
-    | 'CAD'
-    | 'CHF'
-    | 'CNY'
-    | 'CZK'
-    | 'DKK'
-    | 'EUR'
-    | 'GBP'
-    | 'HKD'
-    | 'HRK'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'ISK'
-    | 'JPY'
-    | 'KRW'
-    | 'MXN'
-    | 'MYR'
-    | 'NOK'
-    | 'NZD'
-    | 'PHP'
-    | 'PLN'
-    | 'RON'
-    | 'RUB'
-    | 'SEK'
-    | 'SGD'
-    | 'THB'
-    | 'TRY'
-    | 'USD'
-    | 'ZAR';
+  currency: Currency;
   /** Preferred language of the user */
-  language: 'ru' | 'en' | 'de' | 'es' | 'fr';
+  language: Language;
   /** Show category colours */
   showCategoryColours: boolean;
   /** Show source colours */
@@ -858,44 +825,11 @@ export type UserConfigOutputDto = {
 };
 export type UserConfigInputDto = {
   /** Preferred theme of the user */
-  theme: 'light' | 'dark' | 'system';
+  theme: Theme;
   /** Preferred currency of the user */
-  currency:
-    | 'AUD'
-    | 'BGN'
-    | 'BRL'
-    | 'CAD'
-    | 'CHF'
-    | 'CNY'
-    | 'CZK'
-    | 'DKK'
-    | 'EUR'
-    | 'GBP'
-    | 'HKD'
-    | 'HRK'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'ISK'
-    | 'JPY'
-    | 'KRW'
-    | 'MXN'
-    | 'MYR'
-    | 'NOK'
-    | 'NZD'
-    | 'PHP'
-    | 'PLN'
-    | 'RON'
-    | 'RUB'
-    | 'SEK'
-    | 'SGD'
-    | 'THB'
-    | 'TRY'
-    | 'USD'
-    | 'ZAR';
+  currency: Currency;
   /** Preferred language of the user */
-  language: 'ru' | 'en' | 'de' | 'es' | 'fr';
+  language: Language;
   /** Show category colours */
   showCategoryColours: boolean;
   /** Show source colours */
@@ -913,6 +847,53 @@ export type UserConfigInputDto = {
   /** Show expenses in each currency */
   showExpensesInEachCurrency: boolean;
 };
+export enum Theme {
+  Light = 'light',
+  Dark = 'dark',
+  System = 'system',
+}
+export enum Currency {
+  Aud = 'AUD',
+  Bgn = 'BGN',
+  Brl = 'BRL',
+  Cad = 'CAD',
+  Chf = 'CHF',
+  Cny = 'CNY',
+  Czk = 'CZK',
+  Dkk = 'DKK',
+  Eur = 'EUR',
+  Gbp = 'GBP',
+  Hkd = 'HKD',
+  Hrk = 'HRK',
+  Huf = 'HUF',
+  Idr = 'IDR',
+  Ils = 'ILS',
+  Inr = 'INR',
+  Isk = 'ISK',
+  Jpy = 'JPY',
+  Krw = 'KRW',
+  Mxn = 'MXN',
+  Myr = 'MYR',
+  Nok = 'NOK',
+  Nzd = 'NZD',
+  Php = 'PHP',
+  Pln = 'PLN',
+  Ron = 'RON',
+  Rub = 'RUB',
+  Sek = 'SEK',
+  Sgd = 'SGD',
+  Thb = 'THB',
+  Try = 'TRY',
+  Usd = 'USD',
+  Zar = 'ZAR',
+}
+export enum Language {
+  Ru = 'ru',
+  En = 'en',
+  De = 'de',
+  Es = 'es',
+  Fr = 'fr',
+}
 export const {
   useAuthControllerRegisterMutation,
   useAuthControllerConfirmQuery,

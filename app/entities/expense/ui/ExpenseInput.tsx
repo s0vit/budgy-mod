@@ -1,6 +1,6 @@
 // ExpenseInput.tsx
 import React, { useState } from 'react';
-import { Button, StyleSheet, TextInput, View, useWindowDimensions } from 'react-native';
+import { Button, StyleSheet, TextInput, useWindowDimensions, View } from 'react-native';
 import NumberPad from './NumberPad';
 import HorizontalList from '../../../widgets/HorizontalList/HorizontalList.tsx';
 import ActionButtons from './ActionButtons';
@@ -50,6 +50,7 @@ const ExpenseInput = () => {
   const [timeModalVisible, setTimeModalVisible] = useState(false);
 
   const { width, height } = useWindowDimensions();
+
   const isVertical = height > width;
 
   const getDateTime = (date: Date, time: Date) => {
@@ -150,6 +151,8 @@ const ExpenseInput = () => {
                   setDate(new Date(date.setFullYear(year, month, day)));
                   setDateModalVisible(false);
                 }}
+                endDate={new Date()}
+                startDate={new Date()}
               />
             </View>
             <ActionButtons handleSave={handleSave} handleClear={handleClear} />

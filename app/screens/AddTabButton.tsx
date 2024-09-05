@@ -7,7 +7,11 @@ import { ROOT_STACK_ROUTES, StackNavigation } from './Navigation/types.tsx';
 export const AddTabButton = ({ children }: PropsWithChildren) => {
   const { navigate } = useNavigation<StackNavigation>();
   return (
-    <TouchableOpacity style={styles.button} onPress={() => navigate(ROOT_STACK_ROUTES.ADD_EXPENSE_MODAL)}>
+    <TouchableOpacity
+      style={styles.button}
+      activeOpacity={0.8}
+      onPress={() => navigate(ROOT_STACK_ROUTES.ADD_EXPENSE_MODAL)}
+    >
       <View style={styles.container}>{children}</View>
     </TouchableOpacity>
   );
