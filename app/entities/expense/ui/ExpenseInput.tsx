@@ -1,48 +1,31 @@
-// ExpenseInput.tsx
 import React, { useState } from 'react';
-import { Button, StyleSheet, TextInput, useWindowDimensions, View } from 'react-native';
+import { Alert, Button, StyleSheet, TextInput, useWindowDimensions, View } from 'react-native';
 import NumberPad from './NumberPad';
 import HorizontalList from '../../../widgets/HorizontalList/HorizontalList.tsx';
 import ActionButtons from './ActionButtons';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
-import categoriesMock from '../../../../category.mock.json';
-import paymentSourcesMock from '../../../../paymentSources.mock.json';
-import { CurrencyEnum } from '../../../shared/constants/currencyEnum.ts';
-import CurrencyPicker from '../../../widgets/CurrencyPicker.tsx';
+import { currencyEnum, currencyItems } from '../../../shared/constants/currencyEnum.ts';
+import CustomPicker from '../../../widgets/CustomPicker.tsx';
 import { colors } from '../../../shared/constants/colors.ts';
 import Card from '../../../ui-kit/Card.tsx';
 import SpentThisPeriod from './SpentThisPeriod.tsx';
-import expensesMock from '../../../../expenses.mock.json';
+import {
+  useCategoryControllerGetAllQuery,
+  useExpenseControllerCreateMutation,
+  useExpenseControllerGetOwnQuery,
+  usePaymentSourceControllerGetAllQuery,
+} from '../../../api/budgyApi.ts';
 
 const ExpenseInput = () => {
-  const [expenses, setExpenses] = useState(expensesMock);
-
-  const addExpense = ({
-    categoryId,
-    paymentSourceId,
-    amount,
-    date,
-  }: {
-    categoryId: string;
-    paymentSourceId: string;
-    amount: number;
-    date: string;
-  }) => {
-    const newExpense = {
-      ...expenses[0],
-      _id: Math.random().toString(),
-      createdAt: date,
-      amount,
-      categoryId,
-      paymentSourceId,
-    };
-    setExpenses((prevExpenses) => [newExpense, ...prevExpenses]);
-  };
+  const { data: expenses } = useExpenseControllerGetOwnQuery({});
+  const { data: categories } = useCategoryControllerGetAllQuery();
+  const { data: paymentSources } = usePaymentSourceControllerGetAllQuery();
+  const [addExpense] = useExpenseControllerCreateMutation();
 
   const [amount, setAmount] = useState('0');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPaymentSource, setSelectedPaymentSource] = useState('');
-  const [currency, setCurrency] = useState<CurrencyEnum>(CurrencyEnum.EUR);
+  const [currency, setCurrency] = useState<currencyEnum>(currencyEnum.EUR);
 
   const [date, setDate] = useState(new Date());
   const [dateModalVisible, setDateModalVisible] = useState(false);
@@ -61,11 +44,23 @@ const ExpenseInput = () => {
   };
 
   const handleSave = () => {
+    if (!selectedCategory || !selectedPaymentSource) {
+      Alert.alert('Oops', 'Please select category and payment source');
+      return;
+    }
+    if (Number(amount) <= 0) {
+      Alert.alert('Oops', 'Expense amount should be greater than 0');
+      return;
+    }
+
     addExpense({
-      categoryId: selectedCategory,
-      paymentSourceId: selectedPaymentSource,
-      amount: Number(amount),
-      date: getDateTime(date, time).toISOString(),
+      expenseInputDto: {
+        categoryId: selectedCategory,
+        paymentSourceId: selectedPaymentSource,
+        amount: Number(amount),
+        createdAt: getDateTime(date, time).toISOString(),
+        currency,
+      },
     });
     setAmount('0');
     setSelectedCategory('');
@@ -80,7 +75,7 @@ const ExpenseInput = () => {
 
   const spentThisMonthCard = (
     <Card>
-      <SpentThisPeriod />
+      <SpentThisPeriod expenses={expenses} />
     </Card>
   );
 
@@ -106,7 +101,7 @@ const ExpenseInput = () => {
                 value={amount}
                 editable={false}
               />
-              <CurrencyPicker currency={currency} setCurrency={setCurrency} />
+              <CustomPicker value={currency} setValue={setCurrency} items={currencyItems} />
             </View>
             <NumberPad setAmount={setAmount} />
           </View>
@@ -119,9 +114,9 @@ const ExpenseInput = () => {
             }}
           >
             {!isVertical && spentThisMonthCard}
-            <HorizontalList items={categoriesMock} selectedItem={selectedCategory} setItem={setSelectedCategory} />
+            <HorizontalList items={categories!} selectedItem={selectedCategory} setItem={setSelectedCategory} />
             <HorizontalList
-              items={paymentSourcesMock}
+              items={paymentSources!}
               selectedItem={selectedPaymentSource}
               setItem={setSelectedPaymentSource}
             />

@@ -1,31 +1,29 @@
 import React from 'react';
-import { CurrencyEnum } from '../shared/constants/currencyEnum.ts';
 import Picker, { PickerStyle } from 'react-native-picker-select';
 import { colors } from '../shared/constants/colors.ts';
 
-type TCurrencyPickerProps = {
-  currency: CurrencyEnum;
-  setCurrency: (currency: CurrencyEnum) => void;
+type TCurrencyPickerProps<T> = {
+  value: T;
+  items: { label: string; value: T }[];
+  setValue: (value: T) => void;
 };
 
-const currencyItems = Object.values(CurrencyEnum).map((currency) => ({ label: currency, value: currency }));
-
-const CurrencyPicker = ({ currency, setCurrency }: TCurrencyPickerProps) => {
+const CustomPicker = <T,>({ value, setValue, items }: TCurrencyPickerProps<T>) => {
   return (
     <Picker
       style={styles}
-      onValueChange={(itemValue: CurrencyEnum) => {
-        setCurrency(itemValue);
+      onValueChange={(itemValue: T) => {
+        setValue(itemValue);
       }}
-      value={currency}
-      items={currencyItems}
+      value={value}
+      items={items}
       fixAndroidTouchableBug={true}
       useNativeAndroidPickerStyle={false}
     />
   );
 };
 
-export default CurrencyPicker;
+export default CustomPicker;
 
 const styles: PickerStyle = {
   placeholder: {

@@ -682,7 +682,7 @@ export type PaymentSourceInputDto = {
 };
 export type CategoryOutputDto = {
   /** Category ID */
-  _id: object;
+  _id: string;
   /** Category Title */
   title: string;
   /** User ID */
@@ -693,6 +693,7 @@ export type CategoryOutputDto = {
   createdAt: string;
   /** Date of last update */
   updatedAt: string;
+  color: string;
 };
 export type CategoryInputDto = {
   /** Category name */

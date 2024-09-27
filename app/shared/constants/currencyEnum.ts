@@ -1,4 +1,4 @@
-export enum CurrencyEnum {
+export enum currencyEnum {
   AUD = 'AUD',
   BGN = 'BGN',
   BRL = 'BRL',
@@ -33,3 +33,5 @@ export enum CurrencyEnum {
   USD = 'USD',
   ZAR = 'ZAR',
 }
+
+export const currencyItems = Object.values(currencyEnum).map((currency) => ({ label: currency, value: currency }));

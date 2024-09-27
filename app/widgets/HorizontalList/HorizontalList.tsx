@@ -13,14 +13,20 @@ type THorizontalListProps = {
   items: HorizontalItemProps[];
   selectedItem: string;
   setItem: (id: string) => void;
+  isLoading?: boolean;
 };
 
+//TODO implement Skeletons for loading
+
 const HorizontalList = ({ items, setItem, selectedItem }: THorizontalListProps) => {
+  const handlePress = (id: string) => {
+    setItem(selectedItem === id ? '' : id);
+  };
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
-        {items.map((item) => (
-          <HorizontalItem item={item} key={item._id} selectedItem={selectedItem} setItem={setItem} />
+        {items?.map((item) => (
+          <HorizontalItem item={item} key={item._id} selectedItem={selectedItem} setItem={handlePress} />
         ))}
       </ScrollView>
     </View>

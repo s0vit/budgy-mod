@@ -1,23 +1,44 @@
 import React, { useState } from 'react';
-import { TExpense } from './ExpenseTable.tsx';
-import { spentThisPeriod, TPeriod } from '../../../shared/utils/spentThisPeriod.ts';
-import { CurrencyEnum } from '../../../shared/constants/currencyEnum.ts';
+import { calculateSpentThisPeriod, TPeriod } from '../../../shared/utils/calculateSpentThisPeriod.ts';
+import { currencyEnum, currencyItems } from '../../../shared/constants/currencyEnum.ts';
 import { View, Text, StyleSheet } from 'react-native';
-import CurrencyPicker from '../../../widgets/CurrencyPicker.tsx';
-import expenses from '../../../../expenses.mock.json';
+import CustomPicker from '../../../widgets/CustomPicker.tsx';
+import { ExpenseOutputDto } from '../../../api/budgyApi.ts';
 
-const SpentThisPeriod = () => {
-  const [currency, setCurrency] = useState<CurrencyEnum>(CurrencyEnum.EUR);
+type TSpendThisPeriodProps = {
+  expenses?: ExpenseOutputDto[];
+};
+
+const SpentThisPeriod = ({ expenses }: TSpendThisPeriodProps) => {
+  const [currency, setCurrency] = useState<currencyEnum>(currencyEnum.EUR);
+  const [period, setPeriod] = useState<'month' | 'week' | 'year'>('month');
   const thisMonthPeriod: TPeriod = {
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
   };
+  const thisWeekPeriod: TPeriod = {
+    from: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
+    to: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7),
+  };
+  const thisYearPeriod: TPeriod = {
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(new Date().getFullYear(), 11, 31),
+  };
 
-  const spent = spentThisPeriod(expenses, thisMonthPeriod, currency);
+  const periodMap = {
+    month: thisMonthPeriod,
+    week: thisWeekPeriod,
+    year: thisYearPeriod,
+  };
+
+  //TODO - implement select period
+
+  const spent = calculateSpentThisPeriod(expenses || [], periodMap[period], currency);
+
   return (
     <View style={styles.container}>
       <Text style={styles.totalAmount}>Spent this month: {spent} </Text>
-      <CurrencyPicker currency={currency} setCurrency={setCurrency} />
+      <CustomPicker value={currency} setValue={setCurrency} items={currencyItems} />
     </View>
   );
 };
