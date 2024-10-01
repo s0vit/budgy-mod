@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../store/store.ts';
+import * as SecureStore from 'expo-secure-store';
 import { useAuthControllerLoginMutation } from '../api/budgyApi.ts';
 import {
   Keyboard,
@@ -48,13 +49,15 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (data) {
+      SecureStore.setItem('userCredentials', JSON.stringify({ email, password }));
       dispatch(setUser(data));
     }
-  }, [data, dispatch]);
+  }, [data, dispatch, email, password]);
 
   useEffect(() => {
     if (error) {
       const castedError = error as TErrorType;
+      SecureStore.deleteItemAsync('userCredentials');
       if (castedError.data.meta) {
         if (castedError.data.meta.email) {
           setEmailErrors(castedError.data.meta.email);
@@ -69,6 +72,20 @@ const LoginScreen = () => {
     }
   }, [error]);
 
+  //try to log in with email and password from keychain
+  useEffect(() => {
+    try {
+      const credentials = SecureStore.getItem('userCredentials');
+      if (credentials) {
+        const { email, password } = JSON.parse(credentials);
+        setEmail(email);
+        setPassword(password);
+        login({ loginInputDto: { email, password } });
+      }
+    } catch (error) {
+      console.error("SecureStore couldn't be accessed!", error);
+    }
+  }, [login]);
   const isButtonDisabled = !email || !password || isLoading || emailErrors.length > 0 || passwordErrors.length > 0;
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, TextInput, useWindowDimensions, View } from 'react-native';
+import { Alert, Button, StyleSheet, TextInput, useWindowDimensions, View, Platform } from 'react-native';
 import NumberPad from './NumberPad';
 import HorizontalList from '../../../widgets/HorizontalList/HorizontalList.tsx';
 import ActionButtons from './ActionButtons';
@@ -80,7 +80,7 @@ const ExpenseInput = () => {
   );
 
   return (
-    <>
+    <View style={isVertical && styles.androidOnly}>
       {isVertical && spentThisMonthCard}
       <Card>
         <View
@@ -154,13 +154,16 @@ const ExpenseInput = () => {
           </View>
         </View>
       </Card>
-    </>
+    </View>
   );
 };
 
 export default ExpenseInput;
 
 const styles = StyleSheet.create({
+  androidOnly: {
+    marginTop: Platform.OS === 'android' ? 36 : 0,
+  },
   inputWrapper: {
     justifyContent: 'space-between',
     alignItems: 'center',

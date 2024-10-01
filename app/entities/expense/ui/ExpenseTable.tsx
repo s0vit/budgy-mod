@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Text, StyleSheet } from 'react-native';
 import ExpensesDayGroup from './ExpensesDayGroup.tsx';
 import { ExpenseOutputDto } from '../../../api/budgyApi.ts';
+import { colors } from '../../../shared/constants/colors.ts';
 
 type TExpenseTableProps = {
   expenses?: ExpenseOutputDto[] | undefined;
@@ -25,7 +26,9 @@ const groupExpensesByDate = (expenses: ExpenseOutputDto[]) => {
 };
 
 const ExpenseTable = ({ expenses }: TExpenseTableProps) => {
-  return (
+  return expenses?.length === 0 ? (
+    <Text style={styles.noExpensesText}>No expenses</Text>
+  ) : (
     <FlatList
       data={expenses ? Object.entries(groupExpensesByDate(expenses)) : []}
       keyExtractor={([date]) => date}
@@ -35,3 +38,19 @@ const ExpenseTable = ({ expenses }: TExpenseTableProps) => {
 };
 
 export default ExpenseTable;
+
+const styles = StyleSheet.create({
+  noExpensesText: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: 20,
+    backgroundColor: colors.accentDark,
+    color: colors.white100,
+    borderColor: colors.white60,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    width: '90%',
+    alignSelf: 'center',
+  },
+});
