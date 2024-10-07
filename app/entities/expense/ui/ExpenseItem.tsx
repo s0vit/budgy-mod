@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { addOpacityToColor } from '../../../shared/utils/addOpacityToColor.ts';
-import categoriesMock from '../../../../category.mock.json';
-import paymentSourcesMock from '../../../../paymentSources.mock.json';
 import { getContrastText } from '../../../shared/utils/getContrastText.ts';
 import ExpenseItemMenuModal from './ExpenseItemMenuModal.tsx';
 import { colors } from '../../../shared/constants/colors.ts';
-import { ExpenseOutputDto } from '../../../api/budgyApi.ts';
+import { budgyApi, ExpenseOutputDto } from '../../../api/budgyApi.ts';
+import { useSelector } from 'react-redux';
 
 type TExpenseItemProps = {
   item: ExpenseOutputDto;
@@ -14,11 +13,12 @@ type TExpenseItemProps = {
 
 const ExpenseItem = ({ item }: TExpenseItemProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const categoryTitle = categoriesMock.find((category) => category._id === item.categoryId)?.title || 'Unknown';
-  const categoryColor = categoriesMock.find((category) => category._id === item.categoryId)?.color || colors.white100;
+  const { data: categories } = useSelector(budgyApi.endpoints.categoryControllerGetAll.select());
+  const { data: paymentSources } = useSelector(budgyApi.endpoints.paymentSourceControllerGetAll.select());
+  const categoryTitle = categories?.find((category) => category._id === item.categoryId)?.title || 'Unknown';
+  const categoryColor = categories?.find((category) => category._id === item.categoryId)?.color || colors.white100;
   const paymentSourceColor =
-    paymentSourcesMock.find((paymentSource) => paymentSource._id === item.paymentSourceId)?.color || colors.white100;
+    paymentSources?.find((paymentSource) => paymentSource._id === item.paymentSourceId)?.color || colors.white100;
 
   const editItem = (id: string) => {
     console.log('Edit item', id);

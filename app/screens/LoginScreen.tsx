@@ -16,7 +16,8 @@ import { setUser } from '../entities/user/model/userSlice.ts';
 import { colors } from '../shared/constants/colors.ts';
 import { TErrorType } from '../api/api.ts';
 import Card from '../ui-kit/Card.tsx';
-import Input from '../ui-kit/Input/Input.tsx';
+import Input from '../ui-kit/Input.tsx';
+import TitleText from '../ui-kit/TitleText.tsx';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -92,7 +93,7 @@ const LoginScreen = () => {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.screen}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Text style={styles.title}>{isLoading ? 'Loading...' : 'Hello'}</Text>
+          <TitleText title={isLoading ? 'Loading...' : 'Hello'} />
           <Card extraStyles={{ width: '80%' }}>
             <Input placeholder="Email" value={email} onChangeText={emailEnterHandler} errors={emailErrors} />
             <Input
@@ -131,20 +132,6 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    width: '80%',
-    textAlign: 'center',
-    fontFamily: 'interBlack',
-    backgroundColor: colors.white100,
-    padding: 10,
-    color: colors.accentDark,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: colors.black100,
-    marginBottom: 50,
-    overflow: 'hidden',
   },
   loginButton: {
     backgroundColor: colors.accent,

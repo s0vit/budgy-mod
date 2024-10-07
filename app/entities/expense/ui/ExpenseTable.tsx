@@ -27,7 +27,7 @@ const groupExpensesByDate = (expenses: ExpenseOutputDto[]) => {
 
 const ExpenseTable = ({ expenses }: TExpenseTableProps) => {
   return expenses?.length === 0 ? (
-    <Text style={styles.noExpensesText}>No expenses</Text>
+    <Text style={styles.noExpensesText}>No expenses yet!</Text>
   ) : (
     <FlatList
       data={expenses ? Object.entries(groupExpensesByDate(expenses)) : []}
@@ -41,6 +41,7 @@ export default ExpenseTable;
 
 const styles = StyleSheet.create({
   noExpensesText: {
+    overflow: 'hidden',
     textAlign: 'center',
     fontSize: 20,
     marginTop: 20,

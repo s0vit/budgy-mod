@@ -10,32 +10,59 @@ import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BOTTOM_TAB_ROUTES, BottomTabParamList } from './types.tsx';
 import { ImageBackground, StyleSheet } from 'react-native';
-import { useUserConfigControllerGetConfigQuery } from '../../api/budgyApi.ts';
+import {
+  useCategoryControllerGetAllQuery,
+  usePaymentSourceControllerGetAllQuery,
+  useUserConfigControllerGetConfigQuery,
+} from '../../api/budgyApi.ts';
 import ProfileScreen from '../ProfileScreen.tsx';
+import CategoriesScreen from '../CategoriesScreen.tsx';
 
 type IconNames =
   | 'home'
-  | 'information-circle'
-  | 'list-circle'
-  | 'list-circle-outline'
-  | 'information-circle-outline'
-  | 'home-outline';
+  | 'home-outline'
+  | 'cash'
+  | 'cash-outline'
+  | 'list'
+  | 'list-outline'
+  | 'person'
+  | 'person-outline'
+  | 'account'
+  | 'account-outline'
+  | 'cart'
+  | 'cart-outline'
+  | 'card'
+  | 'card-outline';
+
 type TCreateTabBarIcons = (props: {
   focused: boolean;
   color: string;
   size: number;
-  route: { name: string };
+  route: { name: BOTTOM_TAB_ROUTES };
 }) => JSX.Element;
 
 const createTabBarIcons: TCreateTabBarIcons = ({ focused, color, size, route }) => {
   let iconName: IconProps<IconNames>['name'] = 'home';
 
-  if (route.name === 'Expenses') {
-    iconName = focused ? 'information-circle' : 'information-circle-outline';
-  } else if (route.name === 'Add') {
-    iconName = focused ? 'list-circle' : 'list-circle-outline';
-  } else if (route.name === 'Login') {
-    iconName = focused ? 'home' : 'home-outline';
+  switch (route.name) {
+    case BOTTOM_TAB_ROUTES.EXPENSES:
+      iconName = focused ? 'cash' : 'cash-outline';
+      break;
+    case BOTTOM_TAB_ROUTES.ADD:
+      iconName = focused ? 'list' : 'list-outline';
+      break;
+    case BOTTOM_TAB_ROUTES.LOGIN:
+      iconName = focused ? 'home' : 'home-outline';
+      break;
+    case BOTTOM_TAB_ROUTES.PROFILE:
+      iconName = focused ? 'person' : 'person-outline';
+      break;
+    case BOTTOM_TAB_ROUTES.CATEGORIES:
+      iconName = focused ? 'cart' : 'cart-outline';
+      break;
+    case BOTTOM_TAB_ROUTES.SOURCES:
+      iconName = focused ? 'card' : 'card-outline';
+      break;
   }
 
   return <Ionicons name={iconName} size={size} color={color} />;
@@ -49,6 +76,8 @@ export const MainTabNavigator = () => {
   const { top } = useSafeAreaInsets();
 
   useUserConfigControllerGetConfigQuery(undefined, { skip: !user });
+  useCategoryControllerGetAllQuery(undefined, { skip: !user });
+  usePaymentSourceControllerGetAllQuery(undefined, { skip: !user });
 
   return (
     <ImageBackground
@@ -58,6 +87,7 @@ export const MainTabNavigator = () => {
     >
       <Tab.Navigator
         sceneContainerStyle={{ backgroundColor: 'transparent', paddingTop: top }}
+        initialRouteName={user ? BOTTOM_TAB_ROUTES.EXPENSES : BOTTOM_TAB_ROUTES.LOGIN}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => createTabBarIcons({ focused, color, size, route }),
           headerShown: false,
@@ -67,8 +97,10 @@ export const MainTabNavigator = () => {
           <Tab.Screen name={BOTTOM_TAB_ROUTES.LOGIN} component={LoginScreen} />
         ) : (
           <>
+            <Tab.Screen name={BOTTOM_TAB_ROUTES.SOURCES} component={ProfileScreen} />
             <Tab.Screen name={BOTTOM_TAB_ROUTES.EXPENSES} component={ExpensesListScreen} />
             <Tab.Screen name={BOTTOM_TAB_ROUTES.PROFILE} component={ProfileScreen} />
+            <Tab.Screen name={BOTTOM_TAB_ROUTES.CATEGORIES} component={CategoriesScreen} />
 
             <Tab.Screen
               name={BOTTOM_TAB_ROUTES.ADD}

@@ -1,2 +1,2 @@
-export * from './Input/Input.tsx';
+export * from './Input.tsx';
 export * from './Card.tsx';

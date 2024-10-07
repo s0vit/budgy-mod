@@ -1,5 +1,5 @@
-import { TExpense } from '../../entities/expense/ui/ExpenseTable.tsx';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { ExpenseOutputDto } from '../../api/budgyApi.ts';
 
 export type BottomTabParamList = {
   [BOTTOM_TAB_ROUTES.LOGIN]: undefined;
@@ -12,7 +12,7 @@ export type BottomTabParamList = {
 
 export type RootStackParamList = {
   [ROOT_STACK_ROUTES.MAIN]: undefined;
-  [ROOT_STACK_ROUTES.ADD_EXPENSE_MODAL]: { expense?: TExpense };
+  [ROOT_STACK_ROUTES.ADD_EXPENSE_MODAL]: { expense?: ExpenseOutputDto };
   [ROOT_STACK_ROUTES.CATEGORY_MODAL]: { categoryId?: string };
   [ROOT_STACK_ROUTES.SOURCE_MODAL]: { sourceId?: string };
   [ROOT_STACK_ROUTES.PROFILE_MODAL]: undefined;

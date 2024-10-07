@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
-import { colors } from '../../shared/constants/colors.ts';
+import { colors } from '../shared/constants/colors.ts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 type TInputProps = {

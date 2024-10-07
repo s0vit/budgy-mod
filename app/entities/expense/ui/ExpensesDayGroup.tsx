@@ -67,6 +67,6 @@ const styles = StyleSheet.create({
     fontFamily: 'interBold',
   },
   expensesContainer: {
-    marginLeft: 10,
+    marginLeft: 0,
   },
 });
