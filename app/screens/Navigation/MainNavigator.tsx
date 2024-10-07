@@ -17,6 +17,7 @@ import {
 } from '../../api/budgyApi.ts';
 import ProfileScreen from '../ProfileScreen.tsx';
 import CategoriesScreen from '../CategoriesScreen.tsx';
+import PaymentSourcesScreen from '../PaymentSourcesScreen.tsx';
 
 type IconNames =
   | 'home'
@@ -97,7 +98,7 @@ export const MainTabNavigator = () => {
           <Tab.Screen name={BOTTOM_TAB_ROUTES.LOGIN} component={LoginScreen} />
         ) : (
           <>
-            <Tab.Screen name={BOTTOM_TAB_ROUTES.SOURCES} component={ProfileScreen} />
+            <Tab.Screen name={BOTTOM_TAB_ROUTES.SOURCES} component={PaymentSourcesScreen} />
             <Tab.Screen name={BOTTOM_TAB_ROUTES.EXPENSES} component={ExpensesListScreen} />
             <Tab.Screen name={BOTTOM_TAB_ROUTES.PROFILE} component={ProfileScreen} />
             <Tab.Screen name={BOTTOM_TAB_ROUTES.CATEGORIES} component={CategoriesScreen} />
