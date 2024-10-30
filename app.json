@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "budgy-mob",
+    "description": "An app to help you manage your budget",
     "slug": "budgy-mob",
     "version": "1.0.0",
     "orientation": "default",
@@ -8,18 +9,22 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash.jpg",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#DCD4C1"
     },
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "1.0.0",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sovit.budgy"
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sovit.budgy"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -27,6 +32,11 @@
     "plugins": [
       "expo-font",
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3c4d895e-6973-4e67-a7ef-5d0c79bfa833"
+      }
+    }
   }
 }

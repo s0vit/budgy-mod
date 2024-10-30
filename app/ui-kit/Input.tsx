@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, StyleSheet, View, Text } from 'react-native';
+import { TextInput, StyleSheet, View, Text, ColorValue } from 'react-native';
 import { colors } from '../shared/constants/colors.ts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -8,6 +8,7 @@ type TInputProps = {
   value: string;
   onChangeText: (text: string) => void;
   extraStyles?: Record<string, unknown>;
+  textInputExtraStyles?: Record<string, unknown>;
   isSecureText?: boolean;
   helperText?: string;
   errors?: string[] | string;
@@ -20,6 +21,7 @@ const Input = ({
   value,
   onChangeText,
   extraStyles,
+  textInputExtraStyles,
   isSecureText,
   withEyeIcon,
   helperText,
@@ -30,14 +32,17 @@ const Input = ({
   const helperFinalText = Array.isArray(errors) ? errors?.join('\n') : errors || helperText;
   const [isSecure, setIsSecure] = useState(isSecureText);
 
+  const placeholderTextColor = textInputExtraStyles?.color as ColorValue;
+
   return (
     <View>
       <View style={[styles.inputWithIconWrapper, errorState && styles.errorInput, extraStyles]}>
         <TextInput
           placeholder={placeholder}
+          placeholderTextColor={placeholderTextColor}
           value={value}
           onChangeText={onChangeText}
-          style={styles.input}
+          style={{ ...styles.input, ...textInputExtraStyles }}
           secureTextEntry={isSecure}
         />
         {withEyeIcon && (

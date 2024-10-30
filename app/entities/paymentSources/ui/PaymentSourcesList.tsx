@@ -1,12 +1,22 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { budgyApi } from '../../../api/budgyApi.ts';
+import { budgyApi, CategoryInputDto, usePaymentSourceControllerCreateMutation } from '../../../api/budgyApi.ts';
 import TitleText from '../../../ui-kit/TitleText.tsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { PaymentSourcesItem } from './PaymentSourcesItem.tsx';
+import { colors } from '../../../shared/constants/colors.ts';
+import AddNewItemModal from '../../../ui-kit/AddNewItemModal.tsx';
 
 const PaymentSourcesList = () => {
+  const [isAddNewModalOpen, setIsAddNewModalOpen] = useState(false);
   const { data: sources, isLoading } = useSelector(budgyApi.endpoints.paymentSourceControllerGetAll.select());
+  const [createPaymentSource, { isLoading: isLoadingPS, isSuccess: isSuccessPS }] =
+    usePaymentSourceControllerCreateMutation();
+
+  const handleCreatePaymentSource = ({ title, comments, color }: CategoryInputDto) => {
+    createPaymentSource({ paymentSourceInputDto: { title, comments: comments || '', color } });
+  };
+
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
@@ -18,7 +28,25 @@ const PaymentSourcesList = () => {
   return (
     <View style={styles.centeredContainer}>
       <TitleText title={'Sources'} />
-      <FlatList style={styles.child} data={sources} renderItem={PaymentSourcesItem} />
+      <FlatList
+        style={styles.child}
+        data={sources}
+        renderItem={PaymentSourcesItem}
+        ListHeaderComponent={() => (
+          <Pressable onPress={setIsAddNewModalOpen.bind(null, true)} style={styles.addNew}>
+            <Text>Add new</Text>
+          </Pressable>
+        )}
+      />
+      {isAddNewModalOpen && (
+        <AddNewItemModal
+          open={isAddNewModalOpen}
+          onClose={setIsAddNewModalOpen.bind(null, false)}
+          handleCreate={handleCreatePaymentSource}
+          isCreatingDisabled={isLoadingPS}
+          forceClose={isSuccessPS}
+        />
+      )}
     </View>
   );
 };
@@ -31,5 +59,11 @@ const styles = StyleSheet.create({
   },
   child: {
     width: '100%',
+  },
+  addNew: {
+    margin: 10,
+    backgroundColor: colors.white60,
+    justifyContent: 'center',
+    padding: 10,
   },
 });
